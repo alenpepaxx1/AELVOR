@@ -1,0 +1,386 @@
+[
+  {
+    "label": "authentication",
+    "text": "Account lockout followed repeated incorrect password attempts."
+  },
+  {
+    "label": "authentication",
+    "text": "Authentifizierungsprotokolle zeigen ungewöhnliche Anmeldeereignisse."
+  },
+  {
+    "label": "authentication",
+    "text": "Benutzer hat die Mehrfaktor-Authentifizierung erfolgreich abgeschlossen."
+  },
+  {
+    "label": "authentication",
+    "text": "Failed password authentication repeated for an SSH login user."
+  },
+  {
+    "label": "authentication",
+    "text": "Identitätsanbieter hat eine abgelaufene Sitzung widerrufen."
+  },
+  {
+    "label": "authentication",
+    "text": "Kontosperrung nach wiederholten falschen Passwort-Eingaben."
+  },
+  {
+    "label": "authentication",
+    "text": "Many invalid login attempts originated from one source IP address."
+  },
+  {
+    "label": "authentication",
+    "text": "Mehrfach fehlgeschlagene SSH-Anmeldung mit falschem Passwort."
+  },
+  {
+    "label": "authentication",
+    "text": "Review authentication logs for unusual sign-in events and MFA resets."
+  },
+  {
+    "label": "authentication",
+    "text": "The identity provider revoked an expired sign-in session token."
+  },
+  {
+    "label": "authentication",
+    "text": "User successfully completed multifactor authentication and signed in."
+  },
+  {
+    "label": "authentication",
+    "text": "Viele ungültige Anmeldeversuche von einer einzelnen Quell-IP-Adresse."
+  },
+  {
+    "label": "cloud_security",
+    "text": "An AWS IAM role grants wildcard permissions across cloud resources."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Azure-Abonnement stellt eine verwaltete Datenbank über einen öffentlichen Endpunkt bereit."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Cloud audit trail records a change to a storage bucket access policy."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Cloud-Auditprotokoll erfasst eine geänderte Zugriffsrichtlinie des Speicher-Buckets."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Cloud-Sicherheitsgruppen einschränken und Zugangsdaten des Dienstprinzipals wechseln."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Cloud-Speicher erlaubt öffentlichen Lesezugriff über seine Ressourcenrichtlinie."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Cloud storage bucket permits public read access through its resource policy."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Eine AWS-IAM-Rolle vergibt umfassende Rechte auf Cloud-Ressourcen."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Kubernetes-Workload-Identität und Rechte des Container-Dienstkontos prüfen."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Restrict cloud security groups and rotate the service principal credentials."
+  },
+  {
+    "label": "cloud_security",
+    "text": "Review the Kubernetes workload identity and container service account permissions."
+  },
+  {
+    "label": "cloud_security",
+    "text": "The Azure subscription exposes a managed database through a public endpoint."
+  },
+  {
+    "label": "data_protection",
+    "text": "A document contains personal customer records and must follow the retention policy."
+  },
+  {
+    "label": "data_protection",
+    "text": "Apply data minimization and pseudonymization to an analytics dataset."
+  },
+  {
+    "label": "data_protection",
+    "text": "Data loss prevention detected a spreadsheet containing personal identifiers."
+  },
+  {
+    "label": "data_protection",
+    "text": "Datenminimierung und Pseudonymisierung auf den Analysedatensatz anwenden."
+  },
+  {
+    "label": "data_protection",
+    "text": "Datenverlustprävention erkennt eine Tabelle mit persönlichen Identifikationsdaten."
+  },
+  {
+    "label": "data_protection",
+    "text": "Dokument enthält personenbezogene Kundendaten mit festgelegter Aufbewahrungsfrist."
+  },
+  {
+    "label": "data_protection",
+    "text": "Encrypt sensitive data at rest and manage encryption keys separately."
+  },
+  {
+    "label": "data_protection",
+    "text": "Personenbezogene Daten nach Ablauf der genehmigten Aufbewahrungsfrist löschen."
+  },
+  {
+    "label": "data_protection",
+    "text": "Remove personal data after the approved retention period expires."
+  },
+  {
+    "label": "data_protection",
+    "text": "Restrict access to confidential documents and record authorized data exports."
+  },
+  {
+    "label": "data_protection",
+    "text": "Vertrauliche Daten im Ruhezustand verschlüsseln und Schlüssel getrennt verwalten."
+  },
+  {
+    "label": "data_protection",
+    "text": "Zugriff auf vertrauliche Dokumente einschränken und genehmigte Datenexporte protokollieren."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "A malicious macro launched a child process and downloaded a payload."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "A suspicious process persists through a registry run key after reboot."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Analyze an executable sample hash and compare endpoint detection alerts."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Ein bösartiges Makro startet einen Kindprozess und lädt Schadcode nach."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Endpoint antivirus quarantined a trojan executable after a signature match."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Hash einer ausführbaren Schadsoftware mit Endpunktwarnungen vergleichen."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Malware-Sandbox meldet eine abgelegte Programmdatei und Steuerungsverkehr."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Malware sandbox report shows a dropped executable and command and control traffic."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Ransomware encrypted document files and left a ransom note on the workstation."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Ransomware verschlüsselt Dokumente und hinterlässt eine Lösegeldforderung."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Verdächtiger Prozess nutzt einen Registry-Autostarteintrag zur Persistenz."
+  },
+  {
+    "label": "malware_analysis",
+    "text": "Virenschutz hat eine Trojaner-Datei auf dem Endgerät unter Quarantäne gestellt."
+  },
+  {
+    "label": "network_security",
+    "text": "A network packet capture contains repeated DNS queries to an unknown domain."
+  },
+  {
+    "label": "network_security",
+    "text": "A switch access control list blocks traffic between network segments."
+  },
+  {
+    "label": "network_security",
+    "text": "Firewall-Regeln erlauben eingehenden Verkehr auf einen unnötig offenen Netzwerkport."
+  },
+  {
+    "label": "network_security",
+    "text": "Firewall rules permit inbound traffic to an unnecessary exposed network port."
+  },
+  {
+    "label": "network_security",
+    "text": "Gast-WLAN durch Netzwerksegmentierung von internen Systemen trennen."
+  },
+  {
+    "label": "network_security",
+    "text": "Netzwerksensor meldet ungewöhnliche ausgehende Verbindungen."
+  },
+  {
+    "label": "network_security",
+    "text": "Paketmitschnitt enthält wiederholte DNS-Anfragen an eine unbekannte Domain."
+  },
+  {
+    "label": "network_security",
+    "text": "Review VPN tunnel configuration and routing between private subnets."
+  },
+  {
+    "label": "network_security",
+    "text": "Separate guest Wi-Fi from internal systems with network segmentation."
+  },
+  {
+    "label": "network_security",
+    "text": "The intrusion detection sensor reports unusual outbound network connections."
+  },
+  {
+    "label": "network_security",
+    "text": "VPN-Tunnel-Konfiguration und Routing zwischen privaten Subnetzen prüfen."
+  },
+  {
+    "label": "network_security",
+    "text": "Zugriffsliste eines Switches blockiert Verkehr zwischen Netzwerksegmenten."
+  },
+  {
+    "label": "operations",
+    "text": "A deployment changed the application version during planned maintenance."
+  },
+  {
+    "label": "operations",
+    "text": "Administrator aktualisiert das Inventar und den Patch-Zeitplan."
+  },
+  {
+    "label": "operations",
+    "text": "Bereitstellung ändert die Anwendungsversion während geplanter Wartung."
+  },
+  {
+    "label": "operations",
+    "text": "Create a recovery plan and document the backup retention process."
+  },
+  {
+    "label": "operations",
+    "text": "Geplantes Backup und Wiederherstellungsprüfung wurden abgeschlossen."
+  },
+  {
+    "label": "operations",
+    "text": "Monitoring reports normal service availability and stable disk usage."
+  },
+  {
+    "label": "operations",
+    "text": "Scheduled backup completed and the restore verification succeeded."
+  },
+  {
+    "label": "operations",
+    "text": "Serverwartung umfasst Updates des Betriebssystems und Neustarts."
+  },
+  {
+    "label": "operations",
+    "text": "The administrator updated the asset inventory and patch schedule."
+  },
+  {
+    "label": "operations",
+    "text": "The server maintenance window includes operating system updates."
+  },
+  {
+    "label": "operations",
+    "text": "Wiederherstellungsplan und Aufbewahrung von Sicherungen dokumentieren."
+  },
+  {
+    "label": "operations",
+    "text": "Überwachung meldet normale Verfügbarkeit und stabile Festplattennutzung."
+  },
+  {
+    "label": "phishing",
+    "text": "A fake delivery email asks me to open an attachment and enter credentials."
+  },
+  {
+    "label": "phishing",
+    "text": "An email impersonates the bank and threatens to suspend my account."
+  },
+  {
+    "label": "phishing",
+    "text": "Die Nachricht fordert eine Anmeldung auf einer fremden Webseite."
+  },
+  {
+    "label": "phishing",
+    "text": "Dringende E-Mail verlangt mein Passwort über einen unbekannten Link."
+  },
+  {
+    "label": "phishing",
+    "text": "Eine gefälschte Banknachricht droht mit der Sperrung des Kontos."
+  },
+  {
+    "label": "phishing",
+    "text": "Gefälschte Paket-E-Mail verlangt die Eingabe von Zugangsdaten."
+  },
+  {
+    "label": "phishing",
+    "text": "The message requests a password reset on an unfamiliar sign-in page."
+  },
+  {
+    "label": "phishing",
+    "text": "The sender address differs from the company and asks for urgent payment."
+  },
+  {
+    "label": "phishing",
+    "text": "Unbekannter Absender drängt auf sofortige Überweisung und Linkklick."
+  },
+  {
+    "label": "phishing",
+    "text": "Unexpected invoice attachment asks for payment and login credentials."
+  },
+  {
+    "label": "phishing",
+    "text": "Urgent email asks me to verify my account password through a link."
+  },
+  {
+    "label": "phishing",
+    "text": "Verdächtige Rechnung im Anhang fordert Zahlung und Zugangsdaten."
+  },
+  {
+    "label": "web_security",
+    "text": "A web response lacks secure cookie attributes for the session."
+  },
+  {
+    "label": "web_security",
+    "text": "API-Endpunkt auf SQL-Injection und Zugriffskontrolle prüfen."
+  },
+  {
+    "label": "web_security",
+    "text": "Browser rendert ungefiltertes HTML aus einem Anfrageparameter."
+  },
+  {
+    "label": "web_security",
+    "text": "Die Anwendung deaktiviert die TLS-Zertifikatsprüfung."
+  },
+  {
+    "label": "web_security",
+    "text": "Review the API endpoint for SQL injection and access control issues."
+  },
+  {
+    "label": "web_security",
+    "text": "SQL-Abfrage verknüpft Benutzereingaben statt Parameter zu binden."
+  },
+  {
+    "label": "web_security",
+    "text": "SQL query concatenates untrusted input instead of binding parameters."
+  },
+  {
+    "label": "web_security",
+    "text": "The application disables TLS certificate verification for requests."
+  },
+  {
+    "label": "web_security",
+    "text": "The browser renders unsanitized HTML from a request parameter."
+  },
+  {
+    "label": "web_security",
+    "text": "Unescaped user input reaches innerHTML in the web application."
+  },
+  {
+    "label": "web_security",
+    "text": "Ungeprüfte Benutzereingaben gelangen in innerHTML der Webanwendung."
+  },
+  {
+    "label": "web_security",
+    "text": "Webantwort setzt ein Sitzungscookie ohne sichere Attribute."
+  }
+]

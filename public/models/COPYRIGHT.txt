@@ -1,0 +1,8 @@
+Copyright © 2026 Alen Pepa
+
+AELVOR application code, original scripts, and project-specific modifications.
+All rights reserved for original application code unless otherwise specified.
+
+Third-party libraries, vendored components, models and their existing notices
+retain their respective authors' rights and licenses. Integration notices do
+not replace those licenses or claim ownership of third-party material.
