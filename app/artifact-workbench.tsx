@@ -1,0 +1,94 @@
+"use client";
+// Copyright © 2026 Alen Pepa
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Braces, Check, Code2, Copy, Download, FilePlus2, Loader2, Monitor, Play, RotateCcw, Smartphone, Square, Tablet, Terminal, Trash2 } from "lucide-react";
+import { artifactProject, previewEntry, previewEvent, previewExtension, previewLimits, previewSignature, validatePreviewProject, type PreviewIssue, type PreviewProject } from "../lib/artifact-project";
+import { compilePreview, loadPreviewRuntime } from "../lib/preview-compiler";
+import { buildPreviewDocument } from "../lib/preview-document";
+import { attributeCode } from "../lib/copyright";
+import { COPYRIGHT_NOTICE } from "../lib/brand";
+import type { Artifact } from "../lib/local-tools";
+import type { Locale } from "../lib/templates";
+import { downloadText } from "./markdown";
+
+type View = "code" | "preview";
+type Log = { level: string; text: string };
+export type ArtifactWorkbenchProps = { artifact: Artifact; artifacts: Artifact[]; locale: Locale; active: boolean; intent?: View; requestId?: number; previewOnly?: boolean; onNotice: (text: string) => void };
+export default function ArtifactWorkbench(props: ArtifactWorkbenchProps) {
+  const source = artifactProject(props.artifact, props.artifacts);
+  return <Workbench key={source.key} {...props} source={source}/>;
+}
+function Workbench({ artifact, source, locale, active, intent = "code", requestId = 0, previewOnly = false, onNotice }: ArtifactWorkbenchProps & { source: PreviewProject }) {
+  const t = (en: string, de: string) => locale === "de" ? de : en;
+  const [draft, setDraft] = useState(source), [view, setView] = useState<View>(previewOnly ? "preview" : intent), [fileIndex, setFileIndex] = useState(Math.max(0, source.files.findIndex(file => file.artifactId === artifact.id)));
+  const [device, setDevice] = useState<"desktop" | "tablet" | "phone">("desktop"), [status, setStatus] = useState<"idle" | "building" | "ready" | "error" | "stopped">("idle");
+  const [built, setBuilt] = useState<{ html: string; token: string; signature: string } | null>(null), [issues, setIssues] = useState<PreviewIssue[]>([]), [logs, setLogs] = useState<Log[]>([]), [consoleOpen, setConsoleOpen] = useState(false), [copied, setCopied] = useState(false), [stageWidth, setStageWidth] = useState(0);
+  const frame = useRef<HTMLIFrameElement>(null), stage = useRef<HTMLDivElement>(null), editor = useRef<HTMLTextAreaElement>(null), gutter = useRef<HTMLDivElement>(null), controller = useRef<AbortController | null>(null), epoch = useRef(0), readyTimer = useRef<ReturnType<typeof setTimeout> | null>(null), messageCount = useRef(0);
+  const signature = useMemo(() => previewSignature(draft), [draft]), sourceSignature = previewSignature(source), [originalSignature, setOriginalSignature] = useState(sourceSignature);
+  const selected = draft.files[Math.min(fileIndex, draft.files.length - 1)];
+  const busy = status === "building", changed = Boolean(built && built.signature !== signature), sourceChanged = sourceSignature !== originalSignature;
+  const width = device === "phone" ? 390 : device === "tablet" ? 768 : 1024, height = device === "phone" ? 760 : 720, scale = Math.min(1, Math.max(0.1, (stageWidth || width) / width));
+  const current = useRef({ draft, active, signature }); current.current = { draft, active, signature };
+  const currentToken = useRef("");
+  function clearTimer() { if (readyTimer.current) clearTimeout(readyTimer.current); readyTimer.current = null; }
+  function stop() { epoch.current++; currentToken.current = ""; controller.current?.abort(); controller.current = null; clearTimer(); setBuilt(null); setStatus("stopped"); }
+  function showCode() { if (currentToken.current || controller.current) stop(); setView("code"); }
+  async function run() {
+    if (!current.current.active) return;
+    controller.current?.abort(); controller.current = null; clearTimer(); currentToken.current = ""; const generation = ++epoch.current; setBuilt(null);
+    let project: PreviewProject;
+    try { project = validatePreviewProject(current.current.draft); setDraft(project); } catch (error) { setIssues([{ message: error instanceof Error ? error.message : t("Invalid project.", "Ungültiges Projekt.") }]); setStatus("error"); return; }
+    const abort = new AbortController(), token = `${Date.now()}-${generation}`; currentToken.current = token;
+    controller.current = abort; messageCount.current = 0; setView("preview"); setBuilt(null); setLogs([]); setIssues([]); setStatus("building");
+    try {
+      const [result, runtime] = await Promise.all([compilePreview(project, abort.signal, () => new Worker("/preview/aelvor-preview-compiler.js", { type: "module" })), loadPreviewRuntime(abort.signal)]);
+      if (abort.signal.aborted || epoch.current !== generation || !current.current.active) return;
+      if (result.issues.length) { setIssues(result.issues); setStatus("error"); return; }
+      const html = buildPreviewDocument(result, runtime, token);
+      setBuilt({ html, token, signature: previewSignature(project) });
+      readyTimer.current = setTimeout(() => { if (epoch.current === generation) { setStatus("error"); setIssues([{ message: t("The preview did not confirm startup. Check the console or stop and retry.", "Die Vorschau hat den Start nicht bestätigt. Prüfe die Konsole oder stoppe und versuche es erneut.") }]); } }, 10_000);
+    } catch (error) { if (!abort.signal.aborted && epoch.current === generation) { setIssues([{ message: error instanceof Error ? error.message : t("Preview failed.", "Vorschau fehlgeschlagen.") }]); setStatus("error"); } }
+  }
+  useEffect(() => { if (intent === "preview" && active) void run(); else if (previewOnly) setView("preview"); else showCode(); }, [requestId]); // Explicit open/preview action only.
+  useEffect(() => { const index = current.current.draft.files.findIndex(file => file.artifactId === artifact.id); if (index >= 0) setFileIndex(index); }, [artifact.id]);
+  useEffect(() => { if (!active) stop(); }, [active]);
+  useEffect(() => {
+    const hidden = () => { if (document.visibilityState === "hidden") stop(); };
+    document.addEventListener("visibilitychange", hidden);
+    return () => { epoch.current++; controller.current?.abort(); clearTimer(); document.removeEventListener("visibilitychange", hidden); };
+  }, []);
+  useEffect(() => {
+    if (!built || !active) return;
+    const receive = (event: MessageEvent) => {
+      if (currentToken.current !== built.token || event.source !== frame.current?.contentWindow || event.origin !== "null") return;
+      const value = previewEvent(event.data, built.token); if (!value) return;
+      if (value.type === "ready") { clearTimer(); setStatus(previous => previous === "error" ? previous : "ready"); }
+      else if (value.type === "error") { clearTimer(); setStatus("error"); setConsoleOpen(true); setLogs(previous => [...previous, { level: "error", text: value.text }].slice(-previewLimits.logs)); }
+      else if (messageCount.current++ < previewLimits.logs) setLogs(previous => [...previous, { level: value.level, text: value.text }].slice(-previewLimits.logs));
+    };
+    window.addEventListener("message", receive); return () => window.removeEventListener("message", receive);
+  }, [built, active]);
+  useEffect(() => {
+    const host = stage.current; if (!host) return;
+    const resize = () => setStageWidth(Math.max(100, host.clientWidth - 24));
+    resize(); const observer = typeof ResizeObserver === "function" ? new ResizeObserver(resize) : null;
+    observer?.observe(host); window.addEventListener("resize", resize);
+    return () => { observer?.disconnect(); window.removeEventListener("resize", resize); };
+  }, [view]);
+  function edit(value: string) { setDraft(previous => ({ ...previous, files: previous.files.map((file, index) => index === fileIndex ? { ...file, content: value } : file) })); }
+  function rename(path: string) { setDraft(previous => ({ ...previous, entry: previous.entry === selected.path ? path : previous.entry, files: previous.files.map((file, index) => index === fileIndex ? { ...file, path } : file) })); }
+  function addFile() { let index = 1; while (draft.files.some(file => file.path === `new-file-${index}.html`)) index++; setFileIndex(draft.files.length); setDraft(previous => ({ ...previous, files: [...previous.files, { path: `new-file-${index}.html`, content: `<!-- ${COPYRIGHT_NOTICE} -->\n<main><h1>Hello</h1></main>` }] })); setView("code"); }
+  async function copy() { try { await navigator.clipboard.writeText(selected.content); setCopied(true); setTimeout(() => setCopied(false), 1600); } catch { onNotice(t("Clipboard access is unavailable.", "Die Zwischenablage ist nicht verfügbar.")); } }
+  const labels = { idle: t("Ready to preview", "Bereit zur Vorschau"), building: t("Starting preview…", "Vorschau startet…"), ready: t("Running locally", "Läuft lokal"), error: t("Needs attention", "Prüfung erforderlich"), stopped: t("Preview stopped", "Vorschau gestoppt") };
+  return <section className={`artifact-workbench${previewOnly ? " preview-only" : ""}`} aria-label={t("App code and web preview", "App-Code und Webvorschau")}>
+    <div className="workbench-heading"><span><Braces size={19}/><strong>{t("App workspace", "App-Workspace")}</strong></span><small>{draft.files.length} {t("files", "Dateien")}</small></div>
+    <div className="workbench-mode" hidden={previewOnly} role="group" aria-label={t("Artifact view", "Artefaktansicht")}><button aria-pressed={view === "code"} className={view === "code" ? "selected" : ""} onClick={showCode}><Code2 size={14}/>{t("Code", "Code")}</button><button aria-pressed={view === "preview"} className={view === "preview" ? "selected" : ""} onClick={() => { setView("preview"); if (!built && !busy) void run(); }}><Monitor size={14}/>{t("Preview", "Vorschau")}</button><span className={`preview-status ${status}`} role="status">{busy ? <Loader2 size={11} className="spin"/> : <span/>}{labels[status]}</span></div>
+    {sourceChanged && <p className="workbench-notice">{t("The AI source changed. Your draft is preserved; Reset loads the new source.", "Die AI-Quelle hat sich geändert. Dein Entwurf bleibt erhalten; Zurücksetzen lädt die neue Quelle.")}</p>}
+    <div className="workbench-toolbar"><button disabled={busy || !draft.entry || !active} className="primary-button" onClick={() => void run()}>{busy ? <Loader2 size={13} className="spin"/> : <Play size={12}/>} {t("Run", "Starten")}</button><button className="secondary-button" disabled={!built && !busy} onClick={stop}><Square size={12}/>{t("Stop", "Stoppen")}</button><button hidden={previewOnly} className="text-button" title={t("Reset draft to AI source", "Entwurf auf AI-Quelle zurücksetzen")} onClick={() => { stop(); setDraft(source); setOriginalSignature(sourceSignature); setFileIndex(0); setIssues([]); setLogs([]); }}><RotateCcw size={12}/>{t("Reset", "Zurücksetzen")}</button><button hidden={previewOnly} className="text-button" onClick={() => { try { const project = validatePreviewProject(draft); downloadText(JSON.stringify({ format: "aelvor-preview", version: 1, copyright: COPYRIGHT_NOTICE, ...project }, null, 2), "aelvor-preview-project.json", "application/json"); } catch (error) { onNotice(error instanceof Error ? error.message : "Invalid project"); } }}><Download size={12}/>{t("Project", "Projekt")}</button><button className="text-button" disabled={status !== "ready" || changed || !built} onClick={() => built && downloadText(built.html, "aelvor-app.html", "text/html")}><Download size={12}/>{t("Export app", "App exportieren")}</button></div>
+    {!!issues.length && <div className="preview-issues" role="alert"><strong>{t("Preview diagnostics", "Vorschau-Diagnose")}</strong>{issues.map((issue, index) => <p key={index}>{issue.file && <code>{issue.file}{issue.line ? `:${issue.line}` : ""} · </code>}{issue.message}</p>)}</div>}
+    <div className="workbench-code-view" hidden={previewOnly || view !== "code"}><div className="preview-file-tabs" role="group" aria-label={t("Project files", "Projektdateien")}>{draft.files.map((file, index) => <button key={index} aria-pressed={fileIndex === index} className={fileIndex === index ? "selected" : ""} onClick={() => { setFileIndex(index); setCopied(false); }}>{file.path}</button>)}<button aria-label={t("Add a preview file", "Vorschaudatei hinzufügen")} disabled={draft.files.length >= previewLimits.files} onClick={addFile}><FilePlus2 size={14}/></button></div><div className="preview-file-heading"><input autoCapitalize="none" autoCorrect="off" spellCheck={false} value={selected.path} maxLength={previewLimits.pathCharacters} aria-label={t("File path", "Dateipfad")} onChange={event => rename(event.target.value)}/><button className="icon-button" title={t("Copy current file", "Aktuelle Datei kopieren")} onClick={() => void copy()}>{copied ? <Check size={13}/> : <Copy size={13}/>}</button><button className="icon-button" aria-label={t("Download current file", "Aktuelle Datei herunterladen")} onClick={() => downloadText(attributeCode(selected.content, previewExtension(selected.path)), selected.path.split("/").at(-1) || "aelvor-code.txt")}><Download size={13}/></button><button className="icon-button" disabled={draft.files.length <= 1} aria-label={t("Remove current preview file", "Aktuelle Vorschaudatei entfernen")} onClick={() => { const files = draft.files.filter((_, index) => index !== fileIndex); setDraft({ ...draft, files, entry: draft.entry === selected.path ? files.find(file => previewEntry(file.path))?.path || "" : draft.entry }); setFileIndex(0); }}><Trash2 size={13}/></button></div><div className="preview-editor"><div className="preview-line-numbers" ref={gutter} aria-hidden="true">{selected.content.split("\n").map((_, index) => <span key={index}>{index + 1}</span>)}</div><textarea ref={editor} value={selected.content} maxLength={previewLimits.fileCharacters} spellCheck={false} autoCorrect="off" autoCapitalize="off" aria-label={t("Edit preview source code", "Vorschau-Quellcode bearbeiten")} onChange={event => edit(event.target.value)} onScroll={event => { if (gutter.current) gutter.current.scrollTop = event.currentTarget.scrollTop; }} onKeyDown={event => { if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) { event.preventDefault(); void run(); } if (event.key === "Tab") { event.preventDefault(); const node = event.currentTarget, start = node.selectionStart, end = node.selectionEnd; edit(node.value.slice(0, start) + "  " + node.value.slice(end)); requestAnimationFrame(() => { node.selectionStart = node.selectionEnd = start + 2; }); } }}/></div></div>
+    <div className="workbench-preview-view" hidden={view !== "preview"}><div className="preview-device-bar"><div role="group" aria-label={t("Preview viewport", "Vorschau-Ansichtsfenster")}>{(["desktop", "tablet", "phone"] as const).map(item => { const Icon = item === "desktop" ? Monitor : item === "tablet" ? Tablet : Smartphone; return <button className={device === item ? "selected" : ""} key={item} aria-pressed={device === item} aria-label={item === "desktop" ? "Desktop" : item === "tablet" ? "Tablet" : t("Phone", "Smartphone")} onClick={() => setDevice(item)}><Icon size={14}/></button>; })}</div><small>{width} × {height}</small><label>{t("Entry", "Startdatei")}<select value={draft.entry} onChange={event => setDraft({ ...draft, entry: event.target.value })} aria-label={t("Preview entry file", "Startdatei der Vorschau")}><option value="">{t("Choose a file", "Datei wählen")}</option>{draft.files.filter(file => previewEntry(file.path)).map((file, index) => <option key={index} value={file.path}>{file.path}</option>)}</select></label></div>{changed && <p className="workbench-notice">{t("Draft changed. Run again to update the preview and export.", "Entwurf geändert. Starte erneut, um Vorschau und Export zu aktualisieren.")}</p>}<div className="preview-stage" ref={stage}>{built && active ? <div className="preview-viewport" style={{ width: width * scale, height: height * scale }}><iframe key={built.token} ref={frame} title={t("Generated app web preview", "Webvorschau der generierten App")} sandbox="allow-scripts" referrerPolicy="no-referrer" allow="camera 'none'; microphone 'none'; geolocation 'none'; clipboard-read 'none'; clipboard-write 'none'; payment 'none'; usb 'none'" srcDoc={built.html} style={{ width, height, transform: `scale(${scale})`, transformOrigin: "top left" }}/></div> : <div className="preview-placeholder">{busy ? <Loader2 size={27} className="spin"/> : <Monitor size={29}/>}<strong>{busy ? t("Preparing your app…", "Deine App wird vorbereitet…") : t("Your app comes to life here.", "Hier wird deine App lebendig.")}</strong><p>{t("Run HTML/CSS/JavaScript or a React/TSX component. React, ReactDOM and lucide-react are included; use local files and plain CSS.", "Starte HTML/CSS/JavaScript oder eine React/TSX-Komponente. React, ReactDOM und lucide-react sind enthalten; nutze lokale Dateien und normales CSS.")}</p>{!busy && <button className="primary-button" disabled={!draft.entry || !active} onClick={() => void run()}><Play size={12}/>{t("Run preview", "Vorschau starten")}</button>}</div>}</div></div>
+    <div className="preview-console"><button className="preview-console-toggle" aria-expanded={consoleOpen} onClick={() => setConsoleOpen(!consoleOpen)}><Terminal size={13}/>{t("Console", "Konsole")}<span>{logs.length}</span></button>{consoleOpen && <><button className="text-button" onClick={() => setLogs([])}>{t("Clear console", "Konsole leeren")}</button><div className="preview-log-list" role="log" aria-label={t("Preview console output", "Konsolenausgabe der Vorschau")}>{logs.length ? logs.map((log, index) => <pre className={log.level} key={index}><span>{log.level}</span>{log.text}</pre>) : <p>{t("Console messages and runtime errors appear here.", "Konsolenmeldungen und Laufzeitfehler erscheinen hier.")}</p>}</div></>}</div>
+    <p className="preview-footnote">{previewOnly ? t("This preview uses your saved project draft. Return to Source to edit files. Run is explicit; native programs and server code need their own runtime.", "Diese Vorschau nutzt deinen Projektentwurf. Bearbeite Dateien unter Quellcode. Starte die Vorschau ausdrücklich; native Programme und Servercode benötigen eine eigene Runtime.") : t("Preview edits are temporary and do not change the AI response. Download files or export the project to keep them. The sandbox restricts external resources and app data access. Server code and arbitrary npm packages need a separate runtime.", "Vorschauänderungen sind temporär und ändern die AI-Antwort nicht. Lade Dateien herunter oder exportiere das Projekt, um sie zu behalten. Die Sandbox beschränkt externe Ressourcen und App-Datenzugriff. Servercode und beliebige npm-Pakete benötigen eine eigene Runtime.")}</p>
+  </section>;
+}

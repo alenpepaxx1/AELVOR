@@ -1,0 +1,123 @@
+/* Copyright © 2026 Alen Pepa */
+.studio-v4 .modal-ai { width: min(840px, 100%); }
+.library-intro { color: var(--muted); font-size: 12px; line-height: 1.9; margin: 0 0 22px; }
+.device-panel { padding: 17px; background: var(--surface-low); border: 1px solid var(--line-strong); border-radius: 12px; margin-bottom: 23px; }
+.device-panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+.device-panel-heading h3 { display: flex; align-items: center; gap: 8px; color: var(--text); margin: 0; font-weight: 500; font-size: 12px; }
+.device-panel-heading h3 svg { color: var(--accent); }
+.device-panel-heading button { display: flex; align-items: center; gap: 5px; color: var(--accent); padding: 4px 0; font-size: 10px; }
+.device-cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.device-cards > div { display: grid; grid-template-columns: 20px 1fr; column-gap: 7px; row-gap: 6px; padding: 13px 11px; background: var(--surface); border: 1px solid var(--line); border-radius: 9px; min-width: 0; }
+.device-cards > div > svg { color: var(--accent); grid-row: span 2; margin-top: 2px; }
+.device-cards > div > span { font-size: 8px; letter-spacing: 1px; color: var(--faint); }
+.device-cards strong { font-size: 12px; font-weight: 500; color: var(--text); }
+.device-cards small { grid-column: 1 / -1; font-size: 9px; color: var(--faint); line-height: 1.7; overflow-wrap: anywhere; }
+.hardware-report-panel { margin-top: 20px; padding: 18px; border: 1px solid var(--line-strong); border-radius: 11px; background: var(--surface); }
+.hardware-report-panel > h3 { font-size: 13px; font-weight: 500; color: var(--text); margin: 0 0 10px; }
+.hardware-report-panel p, .hardware-collector-guide { font-size: 10px; color: var(--muted); line-height: 1.9; }
+.hardware-collector-guide summary { color: var(--accent); cursor: pointer; }
+.hardware-collector-guide li { margin: 10px 0; }
+.hardware-collector-guide ol { padding-left: 19px; }
+.hardware-collector-guide a { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); }
+.hardware-collector-guide pre { padding: 12px; border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; background: var(--surface-low); font-size: 10px; }
+.hardware-report-actions, .hardware-budget-controls > div { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 14px 0; }
+.hardware-report-details { margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--line); }
+.hardware-report-details h4 { font-size: 11px; font-weight: 500; margin: 18px 0 10px; color: var(--text); }
+.hardware-report-details ul { padding: 0; list-style: none; }
+.hardware-report-details li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.hardware-report-details li strong { font-size: 12px; font-weight: 500; color: var(--text); }
+.hardware-report-details li span { display: block; color: var(--faint); font-size: 10px; margin-top: 6px; }
+.hardware-report-source { font-size: 10px; color: var(--faint); }
+.hardware-exact-bytes { display: block; color: var(--faint); font-size: 8px; line-height: 1.8; margin-top: 5px; overflow-wrap: anywhere; }
+.hardware-ram-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 20px 0; }
+.hardware-ram-grid dt { font-size: 9px; line-height: 1.8; color: var(--faint); }
+.hardware-ram-grid dd { font-size: 15px; color: var(--text); margin: 6px 0 0; }
+.hardware-gpu-table { overflow-x: auto; }
+.hardware-gpu-table table { border-collapse: collapse; width: 100%; font-size: 10px; }
+.hardware-gpu-table th, .hardware-gpu-table td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--line); line-height: 1.8; }
+.hardware-gpu-table th { font-size: 9px; color: var(--muted); font-weight: 500; }
+.hardware-gpu-table td { color: var(--text); }
+.hardware-gpu-table td small { display: block; color: var(--muted); }
+.hardware-report-warning { color: var(--danger); }
+@media (max-width: 640px) { .device-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hardware-ram-grid { grid-template-columns: 1fr; } .hardware-report-panel { padding: 14px; } .hardware-gpu-table table { min-width: 440px; } .hardware-report-panel button, .hardware-report-panel a[download] { min-height: 44px; } }
+.device-budget-details { border-top: 1px solid var(--line-strong); margin-top: 16px; padding-top: 13px; }
+.device-budget-details summary { cursor: pointer; font-size: 10px; color: var(--muted); }
+.device-budget-details p { color: var(--faint); font-size: 10px; line-height: 1.85; margin: 13px 0; }
+.device-budget-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.device-budget-fields label { display: flex; flex-direction: column; gap: 8px; font-size: 10px; color: var(--muted); }
+.device-budget-fields select, .catalog-search select { padding: 10px; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); color: var(--text); font-size: 11px; min-width: 0; }
+.device-budget-details dl { margin: 0; display: flex; flex-wrap: wrap; gap: 11px 20px; font-size: 9px; color: var(--muted); }
+.device-budget-details dl > div { display: flex; gap: 7px; }
+.device-budget-details dt { color: var(--faint); }
+.device-budget-details dd { margin: 0; }
+.library-view-switch { display: flex; gap: 5px; border-bottom: 1px solid var(--line-strong); padding-bottom: 11px; margin-bottom: 18px; }
+.library-view-switch > button { display: flex; gap: 7px; align-items: center; padding: 7px 10px; border-radius: 7px; color: var(--muted); font-size: 11px; }
+.library-view-switch > button.selected { background: var(--accent-soft); color: var(--accent); }
+.library-view-switch > button > span { padding: 2px 4px; border-radius: 4px; background: var(--surface-high); color: var(--muted); font-size: 9px; }
+.model-library .conversation-model-choices { margin-bottom: 22px; }
+.model-fit { font-size: 9px; font-weight: 400; color: var(--muted); line-height: 1.7; }
+.model-fit.blocked { color: var(--warning); }
+.model-fit.suitable { color: var(--accent); }
+.model-fit.caution { color: var(--muted); }
+.catalog-search { display: grid; grid-template-columns: 1fr 160px; gap: 10px; }
+.catalog-search > label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 0 11px; background: var(--surface-low); color: var(--faint); }
+.catalog-search input { border: 0; padding: 11px 0; width: 100%; color: var(--text); background: transparent; font-size: 11px; outline: none; }
+.catalog-search input::placeholder { color: var(--faint); }
+.catalog-search > label:focus-within { border-color: var(--accent); }
+.catalog-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin: 13px 0; color: var(--faint); font-size: 9px; }
+.catalog-toolbar label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.catalog-toolbar input { accent-color: var(--accent-fill); }
+.catalog-results { max-height: 270px; overflow: auto; border: 1px solid var(--line-strong); border-radius: 9px; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.catalog-row { display: flex; align-items: center; text-align: left; gap: 10px; padding: 13px 12px; width: 100%; background: var(--surface-low); border-bottom: 1px solid var(--line); }
+.catalog-row:last-child { border-bottom: 0; }
+.catalog-row:hover:not(:disabled), .catalog-row.selected { background: var(--accent-soft); }
+.catalog-row.selected { box-shadow: inset 2px 0 0 var(--accent); }
+.catalog-selection { display: grid; place-items: center; width: 25px; height: 25px; flex-shrink: 0; border: 1px solid var(--line-strong); border-radius: 7px; color: var(--accent); }
+.catalog-model { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+.catalog-model strong { color: var(--text); font-size: 11px; font-weight: 500; line-height: 1.7; overflow-wrap: anywhere; }
+.catalog-model > small { color: var(--faint); font-size: 8px; overflow-wrap: anywhere; line-height: 1.6; }
+.catalog-spec { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; min-width: 125px; }
+.catalog-spec > span { color: var(--muted); font-size: 9px; }
+.catalog-spec .model-fit { font-size: 8px; text-align: right; }
+.catalog-empty { text-align: center; color: var(--muted); font-size: 11px; padding: 23px 15px; line-height: 1.8; }
+.catalog-format-note { font-size: 10px; color: var(--faint); line-height: 1.9; margin: 14px 0 22px; }
+.selected-model-details { margin: 20px 0; }
+.selected-model-details > div:first-child { display: flex; justify-content: space-between; align-items: center; gap: 13px; }
+.selected-model-details h3 { color: var(--text); font-size: 13px; font-weight: 500; margin: 0; line-height: 1.7; }
+.selected-model-details a { color: var(--accent); display: inline-flex; align-items: center; gap: 5px; font-size: 9px; white-space: nowrap; }
+.selected-model-details > code { display: block; color: var(--faint); font-size: 9px; line-height: 1.8; overflow-wrap: anywhere; margin-top: 5px; }
+.selected-model-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.selected-model-facts > span { border: 1px solid var(--line-strong); border-radius: 5px; padding: 4px 6px; font-size: 9px; color: var(--muted); }
+.model-resource-report { display: flex; flex-direction: column; gap: 8px; padding: 15px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--surface-low); }
+.model-resource-report > strong { color: var(--text); font-weight: 500; font-size: 11px; }
+.model-resource-report > span { color: var(--muted); font-size: 10px; }
+.model-resource-report > small { color: var(--faint); line-height: 1.85; font-size: 9px; }
+.model-resource-report.blocked { border-color: color-mix(in srgb, var(--warning) 30%, transparent); }
+.model-resource-report.blocked > strong { color: var(--warning); }
+.model-resource-report.suitable { border-color: var(--accent-line); }
+.model-resource-report.suitable > strong { color: var(--accent); }
+.model-resource-report ul { padding-left: 15px; margin: 0; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+.model-resource-report.checking { flex-direction: row; align-items: center; color: var(--muted); font-size: 11px; }
+.model-library .conversation-download-note { margin-top: 16px; }
+.model-download-summary { display: flex; flex-direction: column; gap: 8px; padding: 15px; margin-top: 12px; border: 1px solid var(--accent-line); border-radius: 10px; background: var(--surface-low); overflow-wrap: anywhere; }
+.model-download-summary strong { color: var(--text); font-size: 11px; font-weight: 500; }
+.model-download-summary span { color: var(--accent); font-size: 10px; line-height: 1.7; }
+.model-download-summary small { color: var(--muted); font-size: 10px; line-height: 1.8; }
+@media (max-width: 560px) {
+  .device-panel { padding: 13px; }
+  .device-cards { gap: 6px; }
+  .device-cards > div { padding: 10px 8px; column-gap: 3px; grid-template-columns: 17px 1fr; }
+  .device-cards strong { font-size: 10px; }
+  .device-cards small { font-size: 8px; }
+  .device-cards > div > svg { width: 14px; }
+  .device-budget-fields { gap: 8px; }
+  .device-budget-fields select { width: 100%; font-size: 10px; padding: 9px 6px; }
+  .catalog-search { grid-template-columns: 1fr; }
+  .library-view-switch > button { font-size: 10px; padding: 6px 7px; }
+  .catalog-row { padding: 11px 9px; gap: 8px; flex-wrap: wrap; }
+  .catalog-model { flex-basis: calc(100% - 40px); }
+  .catalog-spec { margin-left: 33px; flex-direction: row; flex-wrap: wrap; gap: 7px; align-items: baseline; }
+  .catalog-results { max-height: 280px; }
+  .selected-model-details > div:first-child { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .library-intro { font-size: 11px; }
+}

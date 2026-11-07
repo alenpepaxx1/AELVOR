@@ -1,0 +1,43 @@
+/* Copyright © 2026 Alen Pepa */
+.mobile-support { margin: 0 0 20px; padding: 18px; border: 1px solid var(--accent-line); border-radius: 13px; background: linear-gradient(135deg, var(--accent-soft), var(--surface-low)); }
+.mobile-support-heading { display: flex; align-items: center; gap: 11px; }
+.mobile-support-heading > span:first-child { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; color: var(--accent); background: var(--accent-soft); flex-shrink: 0; }
+.mobile-support-heading > div { flex: 1; min-width: 0; }
+.mobile-support-heading small { display: block; color: var(--accent); font-size: 8px; letter-spacing: 1.2px; margin-bottom: 5px; }
+.mobile-support-heading h3 { margin: 0; font-size: 14px; font-weight: 550; }
+.mobile-support > p { margin: 12px 0; color: var(--muted); font-size: 10px; line-height: 1.9; }
+.mobile-support-facts { display: flex; gap: 6px; flex-wrap: wrap; }
+.mobile-support-facts > span { padding: 5px 7px; background: var(--surface); border: 1px solid var(--line); border-radius: 5px; color: var(--muted); font-size: 8px; line-height: 1.5; }
+.mobile-preset-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin: 14px 0; }
+.mobile-preset-buttons button { display: flex; gap: 9px; align-items: center; text-align: left; padding: 12px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 8px; min-width: 0; min-height: 50px; color: var(--accent); }
+.mobile-preset-buttons button:disabled { opacity: .45; cursor: default; }
+.mobile-preset-buttons strong { display: block; color: var(--text); font-size: 10px; line-height: 1.6; }
+.mobile-preset-buttons small { display: block; color: var(--muted); font-size: 9px; line-height: 1.6; overflow-wrap: anywhere; }
+.mobile-background-option { display: flex; gap: 9px; align-items: flex-start; padding-top: 12px; border-top: 1px solid var(--line); min-height: 44px; cursor: pointer; }
+.mobile-background-option input { margin-top: 3px; accent-color: var(--accent-fill); width: 17px; height: 17px; flex-shrink: 0; }
+.mobile-background-option strong { display: block; color: var(--text); font-size: 10px; line-height: 1.8; font-weight: 500; }
+.mobile-background-option small { display: block; color: var(--muted); font-size: 9px; line-height: 1.8; }
+.mobile-support .mobile-language-note { color: var(--warning); }
+.mobile-support .mobile-browser-note { font-size: 9px; margin-bottom: 0; }
+.app-shell, .profile-onboarding { height: var(--phone-viewport-height, 100dvh); }
+@media (max-width: 760px) {
+  .mobile-support { padding: 15px; }
+  .mobile-preset-buttons { grid-template-columns: 1fr; }
+  .studio-v4 .topbar { padding-top: env(safe-area-inset-top); height: calc(61px + env(safe-area-inset-top)); min-height: calc(61px + env(safe-area-inset-top)); }
+  .studio-v4 .sidebar { padding-top: env(safe-area-inset-top); }
+  .studio-v4 .chat-composer-area { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .welcome { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+  .modal-overlay { height: var(--phone-viewport-height, 100dvh); bottom: auto; padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); }
+  .modal { max-height: calc(var(--phone-viewport-height, 100dvh) - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+  .profile-onboarding { padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+}
+@media (pointer: coarse) and (max-width: 900px) {
+  .composer textarea, .modal input:not([type="checkbox"]), .modal textarea, .modal select, .username-form input { font-size: 16px; }
+  .studio-v4 .composer .icon-button, .studio-v4 .composer .send-button { width: 44px; height: 44px; flex-shrink: 0; }
+  .composer-toolbar { flex-wrap: wrap; align-items: center; }
+  .composer-toolbar > .composer-tools:last-child { margin-left: auto; }
+  .studio-v4 .voice-button { min-width: 44px; min-height: 44px; }
+  .mode-button, .modal-close, .username-submit, .hardware-runtime-tabs button, .activate-conversation, .mobile-preset-buttons button { min-height: 44px; }
+  .modal .icon-button { min-height: 44px; min-width: 44px; }
+  .icon-button, .send-button, .mobile-preset-buttons button { touch-action: manipulation; }
+}
